@@ -6,7 +6,7 @@
 - Schema:
     - init: crear una carpeta con la información: 
         config -> configuraciones / 
-        logs -> carpeta con los backups hechos / 
+        logs -> lista con los backups hechos / 
         source -> lista con los archivos de la carpeta y carpeta receptora /
         temporal -> el archivo con los archivos añadidos que se guardaran /
         ...

@@ -1,0 +1,4 @@
+Use: prob add <file>
+
+Consideration:
+    - You can also pass in '.' as file to add all files in the current directory

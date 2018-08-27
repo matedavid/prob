@@ -1,0 +1,10 @@
+Use: prob config <configuration> [value]
+
+OR: prob config <configuration> : to get the value
+
+configurations:
+    - path: the path to the folder where the project will be backed up
+
+OR:
+    - path: to get the path assigned
+    - added: to get all the added files

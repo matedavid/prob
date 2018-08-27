@@ -41,7 +41,11 @@ void configCommand(const char* inputs[], int num) {
         std::fstream config((std::string)directory + "/prob/config");
         if (config.is_open()) {
             if (std::string(inputs[2]).compare("path") == 0) {
-                config << std::string(inputs[3]);
+                std::string path = inputs[3];
+                if (path[path.length() - 1] != '/') {
+                    path += '/';
+                }
+                config << std::string(path);
             }
             std::cout << "[SUCCES]: Configuration added succesfully" << std::endl;
         } else {

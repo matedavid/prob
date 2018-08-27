@@ -1,0 +1,19 @@
+- Pensar como enfocar projecto:
+    - .gitc sea archivo o carpeta
+    - que parametros tendrá el archivo/carpeta
+    - como interacturá con el usuario
+
+- Schema:
+    - init: crear una carpeta con la información: 
+        config -> configuraciones / 
+        logs -> carpeta con los backups hechos / 
+        source -> lista con los archivos de la carpeta y carpeta receptora /
+        temporal -> el archivo con los archivos añadidos que se guardaran /
+        ...
+
+    - config: donde se podra acceder y seleccionar los configuraciones
+    - save: con lo que se prodrá guardar el projecto
+    - add: añadirá los archivos al archivo temporal
+
+- Archivos aceptados:
+    - .gitcignore -> los archivos en este archivo no se añadiran al archivo temporal

@@ -1,0 +1,6 @@
+Use: gitc <command> [flags]
+
+commands:
+    - init : Creates the main file for the program
+    - config : Specify the configurations for the program to follow
+    - ...

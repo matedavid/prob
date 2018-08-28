@@ -66,7 +66,7 @@ void configCommand(const char* inputs[], int num) {
                 while(getline(file, line)) {
                     if (line.compare(".") == 0) {
                         stringvec allFiles;
-                        read_directory(".", allFiles);
+                        read_directory(".", allFiles, "");
                         for (int i = 0; i < allFiles.size(); i++) {
                             std::cout << allFiles[i] << std::endl;
                             noFile = false;
@@ -95,14 +95,14 @@ void addCommand(const char* inputs[], int num) {
     if (flags) {
         std::fstream temporal(std::string(directory) + "/prob/temporal");
         if (temporal.is_open()) {
-            stringvec filesInDirecory, filesToAdd;
-            read_directory(std::string(directory), filesInDirecory);
+            stringvec filesInDirectory, filesToAdd;
+            read_directory(std::string(directory), filesInDirectory, " ");
 
             // Add all files
             if (compareString(inputs[2], ".")) {
-                for (int i = 0; i < filesInDirecory.size(); i++) {
-                    temporal << filesInDirecory[i] << "\n";
-                    std::cout << filesInDirecory[i] << " added succesfully" << std::endl;
+                for (int i = 0; i < filesInDirectory.size(); i++) {
+                    temporal << filesInDirectory[i] << "\n";
+                    std::cout << filesInDirectory[i] << " added succesfully" << std::endl;
                 }
                 std::cout << "Found files added, if your path is set up, run 'prob backup' to save the files" << std::endl;
             } else if (compareString(inputs[2], "--reset") || compareString(inputs[2], "-r"))  {
@@ -117,6 +117,7 @@ void addCommand(const char* inputs[], int num) {
                 }
             
             // To add specific files
+        
             } else {
                 for (int i = 2; i < num; i++) {
                     std::string line;
@@ -124,7 +125,7 @@ void addCommand(const char* inputs[], int num) {
                     while (getline(temporal, line)) {
                         filesAdded.push_back(line);
                     }
-                    if (seeIfInList(inputs[i], filesInDirecory)) {
+                    if (seeIfInList(inputs[i], filesInDirectory)) {
                         clearFile(temporal, std::string(directory) + "/prob/temporal");
                         std::ofstream temporal(std::string(directory) + "/prob/temporal");
                         if (filesAdded.size() > 0) {
@@ -163,6 +164,17 @@ void backupCommand(const char* inputs[], int num) {
         getline(config, path);
         if (!compareString(path, "") && !compareString(path, " ")) {
             while(getline(temporal, line)) {
+                if (line.find("/") != std::string::npos) {
+                    std::string folder = path;
+                    int i = 0;
+                    while(line[i] != '/') {
+                        folder+=line[i];
+                        i++;
+                    }
+                    if (!opendir(folder.c_str())) {
+                        createFolder(folder);
+                    } 
+                }
                 copyFile(std::string(directory) + "/" + line, path + line);
             }
             std::cout << "Possible files were saved" << std::endl;

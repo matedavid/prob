@@ -2,3 +2,6 @@ Use: prob add <file>
 
 Consideration:
     - You can also pass in '.' as file to add all files in the current directory
+    - If you want to save a file inside of a folder, add the full path ex. directory/file, of use '.' to add all files.
+    - You can create a file named .probignore in the program directory, and add in there the name of the files you dont want to be added
+    

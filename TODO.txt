@@ -1,5 +1,5 @@
 - Pensar como enfocar projecto:
-    - .gitc sea archivo o carpeta
+    - .prob sea archivo o carpeta
     - que parametros tendrá el archivo/carpeta
     - como interacturá con el usuario
 
@@ -16,4 +16,4 @@
     - add: añadirá los archivos al archivo temporal
 
 - Archivos aceptados:
-    - .gitcignore -> los archivos en este archivo no se añadiran al archivo temporal
+    - .probignore -> los archivos en este archivo no se añadiran al archivo temporal

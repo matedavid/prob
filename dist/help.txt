@@ -1,6 +1,7 @@
-Use: gitc <command> [flags]
+Use: prob <command> [flags]
 
 commands:
     - init : Creates the main file for the program
     - config : Specify the configurations for the program to follow
-    - ...
+    - add : add files to be saved
+    - backup : save the files added to the path specified in config

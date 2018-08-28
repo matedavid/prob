@@ -2,19 +2,6 @@
 
 #include "../header/commands.h"
 
-void showHelp(std::string path) {
-    std::ifstream helpFile(path, std::ios::in);
-    if (helpFile.is_open()) {
-        std::string line;
-        while (getline(helpFile, line)) {
-            std::cout << line << std::endl;
-        }
-        helpFile.close();
-    } else {
-        std::cout << "File not opened" << std::endl;
-    }
-}
-
 void initCommand(const char* inputs[], int num) {
     int success = createFolder((std::string)directory + "/prob");
     if (success == 0) {
@@ -88,7 +75,7 @@ void configCommand(const char* inputs[], int num) {
                     std::cout << "No added files, run 'prob add <files>' to add files" << std::endl;
                 }
             } else {
-                std::cout << "Temoral file not found, try running 'prob init'" << std::endl;
+                std::cout << "Temporal file couldn't be found, try running 'prob init' to set up the environment" << std::endl;
             }
         } else {
             showHelp(workdir + "dist/spec/config.txt");
@@ -96,42 +83,57 @@ void configCommand(const char* inputs[], int num) {
     }
 }
 
-bool seeIfInList(std::string thing, stringvec array) {
-    for (int i = 0; i < array.size(); i++) {
-        if (array[i].compare(thing) == 0) {
-            return true;
-        }
-    }
-    return false;
-}
-
 void addCommand(const char* inputs[], int num) {
     bool flags = num > 2 ? true : false;
 
     if (flags) {
-        std::ofstream temporal(std::string(directory) + "/prob/temporal");
-        stringvec filesInDirecory, filesToAdd;
-        read_directory(std::string(directory), filesInDirecory);
-        if (std::string(inputs[2]).compare(".") == 0) {
-            temporal << ".";
-            std::cout << "All files added" << std::endl;
-        } else {
-            for (int i = 2; i < num; i++) {
-                filesToAdd.push_back(inputs[i]);
-            }
-
-            for (int i = 0; i < filesToAdd.size(); i++) {
-                bool found = seeIfInList(filesToAdd[i], filesInDirecory);
-                if (found) {
-                    temporal << filesToAdd[i] << "\n";
-                    std::cout << filesToAdd[i] << " added succesfully" << std::endl;
-                } else {
-                    std::cout << filesToAdd[i] << " couldn't be found" << std::endl;
+        std::fstream temporal(std::string(directory) + "/prob/temporal");
+        if (temporal.is_open()) {
+            stringvec filesInDirecory, filesToAdd;
+            read_directory(std::string(directory), filesInDirecory);
+            if (compareString(inputs[2], ".")) {
+                for (int i = 0; i < filesInDirecory.size(); i++) {
+                    temporal << filesInDirecory[i] << "\n";
+                    std::cout << filesInDirecory[i] << " added succesfully" << std::endl;
                 }
+                std::cout << "Found files added, if your path is set up, run 'prob backup' to save the files" << std::endl;
+            } else if (compareString(inputs[2], "--reset") || compareString(inputs[2], "-r"))  {
+                std::string line;
+                getline(temporal, line);
+                if (!compareString(line, "") && !compareString(line, " ")) {
+                    clearFile(temporal, std::string(directory) + "/prob/temporal");
+                    std::ofstream clear(std::string(directory) + "/prob/temporal",  std::ofstream::trunc);
+                    std::cout << "Files to add reseted" << std::endl;
+                } else {
+                    std::cout << "[ERROR/s]: no files added, fun 'prob add <files>' to add files" << std::endl;
+                }
+            } else {
+                for (int i = 2; i < num; i++) {
+                    std::string line;
+                    stringvec filesAdded;
+                    while (getline(temporal, line)) {
+                        filesAdded.push_back(line);
+                    }
+                    if (seeIfInList(inputs[i], filesInDirecory)) {
+                        clearFile(temporal, std::string(directory) + "/prob/temporal");
+                        std::ofstream temporal(std::string(directory) + "/prob/temporal");
+                        if (filesAdded.size() > 0) {
+                            for (int i = 0; i < filesAdded.size(); i++) {
+                                temporal << filesAdded[i] << "\n";
+                            }
+                        }
+                        temporal << inputs[i] << "\n";
+                        std::cout << inputs[i] << " added succefully" << std::endl;
+                    } else {
+                        std::cout << "[ERROR/s]: " << inputs[i] << " was not found" << std::endl;
+                    }
+                }
+                std::cout << "Found files added, if your path is set up, run 'prob backup' to save the files" << std::endl;
             }
-            std::cout << "Found files added" << std::endl;
+            temporal.close();
+        } else {
+            std::cout << "Temporal file couldn't be found, try running 'prob init' to set up the environment" << std::endl;
         }
-        temporal.close();
     } else {
         showHelp(workdir + "dist/spec/add.txt");
     }

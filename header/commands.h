@@ -1,10 +1,11 @@
 #pragma once
 
 #include "config.h"
+#include "extraFuncs.h"
 #include "pathFuncs.h"
 #include "codification.h"
+#include "files.h"
 
-void showHelp(std::string path);
 void initCommand(const char* inputs[], int num);
 void configCommand(const char* inputs[], int num);
 void addCommand(const char* inputs[], int num);

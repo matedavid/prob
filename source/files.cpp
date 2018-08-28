@@ -1,7 +1,21 @@
 #include "../header/files.h"
 
-void copyFile(std::string pathFile, std::string pahToCopy) {
-    
+void copyFile(std::string pathFile, std::string pathToCopy) {
+    std::ifstream copy(pathFile);
+    std::ofstream paste(pathToCopy);
+    //std::cout << pathToCopy << std::endl;
+
+    if (copy.is_open() && paste.is_open()) {
+        std::string line;
+        while (getline(copy, line)) {
+            paste << line << '\n';
+        }
+        std::cout << pathFile << " copied to: " << pathToCopy << std::endl;
+        copy.close();
+        paste.close();
+    } else {
+        std::cout << "[ERROR/s]: Something was wrong when copying " << pathToCopy << std::endl;
+    }
 }
 
 bool seeIfInList(std::string thing, stringvec array) {

@@ -13,11 +13,10 @@ void read_directory(const std::string& name, stringvec& v)
         while (getline(probIgnore, file)) {
             toIgnore.push_back(file);
         }
-        toIgnore.push_back("prob");
         toIgnore.push_back(".probignore");
     }
     while ((dp = readdir(dirp)) != NULL) {
-        if (!compareString(dp->d_name, ".") && !compareString(dp->d_name, "..") && !compareString(dp->d_name, ".DS_Store")) {
+        if (!compareString(dp->d_name, ".") && !compareString(dp->d_name, "..") && !compareString(dp->d_name, ".DS_Store") && !compareString(dp->d_name, "prob")) {
             if (toIgnore.size() > 0) {
                 if (!seeIfInList(dp->d_name, toIgnore)) {
                     v.push_back(dp->d_name);

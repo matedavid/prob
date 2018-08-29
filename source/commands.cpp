@@ -165,11 +165,21 @@ void backupCommand(const char* inputs[], int num) {
         if (!compareString(path, "") && !compareString(path, " ")) {
             while(getline(temporal, line)) {
                 if (line.find("/") != std::string::npos) {
-                    std::string folder = path;
+                    std::string folder = path, toAddLine;
+                    //std::cout << line << std::endl;
                     int i = 0;
-                    while(line[i] != '/') {
-                        folder+=line[i];
-                        i++;
+                    while(line[i] != line[line.length()]) {
+                        if (line[i] == '/') {
+                            folder+= toAddLine + "/";
+                            toAddLine.clear();
+                            i++;
+                            if (!opendir(folder.c_str())) {
+                                createFolder(folder);
+                            } 
+                        } else {
+                            toAddLine += line[i];
+                            i++;
+                        }
                     }
                     if (!opendir(folder.c_str())) {
                         createFolder(folder);

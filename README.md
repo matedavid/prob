@@ -11,9 +11,3 @@ prob command [flags]
 * config: to set and acces various configurations of your environment
 * add: used to add the files that you want to be backed up
 * backup: command that backs up all the files that you added
-
-
-## Intentions with this project: 
-My goal when I was creating this project was not to 'reinvent the wheel' by sort of copying git. From the beginning it was focused on learning and improving my skills as a programmer, and if the project turned out to be good, used myself for some projects. And for the time being, it is fulfilling that objective.
-
-

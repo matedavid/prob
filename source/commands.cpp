@@ -181,9 +181,10 @@ void backupCommand(const char* inputs[], int num) {
                             i++;
                         }
                     }
+                    /*
                     if (!opendir(folder.c_str())) {
                         createFolder(folder);
-                    } 
+                    }*/
                 }
                 copyFile(std::string(directory) + "/" + line, path + line);
             }

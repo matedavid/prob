@@ -45,7 +45,7 @@ void configCommand(const char* inputs[], int num) {
         }
         config.close();
     } else {
-        if (std::string(inputs[2]).compare("path") == 0) {
+        if (compareString(inputs[2], "path")) { 
             std::ifstream file(std::string(directory) + "/prob/config");
             if (file.is_open()) {
                 std::string path;
@@ -58,7 +58,7 @@ void configCommand(const char* inputs[], int num) {
             } else {
                 std::cout << "Configure file not found, try running 'prob init'" << std::endl;
             }
-        } else if (std::string(inputs[2]).compare("added") == 0) {
+        } else if (compareString(inputs[2], "added")) { 
             std::ifstream file(std::string(directory) +  "/prob/temporal");
             if (file.is_open()) {
                 std::string line; 
@@ -82,6 +82,21 @@ void configCommand(const char* inputs[], int num) {
             } else {
                 std::cout << "Temporal file couldn't be found, try running 'prob init' to set up the environment" << std::endl;
             }
+        } else if (compareString(inputs[2], "logs")) {
+            std::ifstream logs(std::string(directory) + "/prob/logs");
+            if (logs.is_open()) {
+                std::string line;
+                bool noLogs = true;
+                while(getline(logs, line)) {
+                    std::cout << line << std::endl;
+                    noLogs = false;
+                }
+
+                if (noLogs) {
+                    std::cout << "No logs were found, run 'prob backup' to save files and logs will be added" << std::endl;
+                }
+            }
+            logs.close();
         } else {
             showHelp(workdir + "dist/spec/config.txt");
         }
@@ -117,7 +132,6 @@ void addCommand(const char* inputs[], int num) {
                 }
             
             // To add specific files
-        
             } else {
                 for (int i = 2; i < num; i++) {
                     std::string line;
@@ -158,15 +172,16 @@ void addCommand(const char* inputs[], int num) {
 void backupCommand(const char* inputs[], int num) {
     std::ifstream config(std::string(directory) + "/prob/config");
     std::ifstream temporal(std::string(directory) + "/prob/temporal");
+    std::fstream logs(std::string(directory) + "/prob/logs", std::ios::in | std::ios::out | std::ios::ate);
+    int filesSaved = 0;
     
-    if (config.is_open() && temporal.is_open()) {
+    if (config.is_open() && temporal.is_open() && logs.is_open()) {
         std::string path, line;
         getline(config, path);
         if (!compareString(path, "") && !compareString(path, " ")) {
             while(getline(temporal, line)) {
                 if (line.find("/") != std::string::npos) {
                     std::string folder = path, toAddLine;
-                    //std::cout << line << std::endl;
                     int i = 0;
                     while(line[i] != line[line.length()]) {
                         if (line[i] == '/') {
@@ -181,16 +196,20 @@ void backupCommand(const char* inputs[], int num) {
                             i++;
                         }
                     }
-                    /*
-                    if (!opendir(folder.c_str())) {
-                        createFolder(folder);
-                    }*/
                 }
                 copyFile(std::string(directory) + "/" + line, path + line);
+                filesSaved++;
             }
             std::cout << "Possible files were saved" << std::endl;
+            // Saving the backup history on logs folder
+            time_t now = std::time(0);
+            char* time_string = std::ctime(&now);
+            logs << filesSaved << " files saved on " << std::string(time_string);
+
+            // Closing opened files
             config.close();
             temporal.close();
+            logs.close();
         } else {
             std::cout << "Path not configured, run 'prob config path <path>' to configure it" << std::endl;
         }

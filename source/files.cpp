@@ -32,3 +32,7 @@ void clearFile(std::fstream& fileToClear, std::string path) {
     std::ofstream clear(path, std::ofstream::trunc);
     clear.close();
 }
+
+void readFile(std::fstream& file, std::string& toCopy) {
+    
+}

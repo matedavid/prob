@@ -217,3 +217,27 @@ void backupCommand(const char* inputs[], int num) {
         std::cout << "[ERROR/s]: file couldn't be found, try running 'prob init' set up the environment" << std::endl;
     }
 }
+
+void singleBackup(const char* inputs[], int num) {
+    if (inputs[3] != NULL) {
+        if (opendir(inputs[3])) {
+            std::string path = inputs[3];
+            path = path[path.length()] == '/' ? path : path + '/';
+            if (compareString(inputs[4], "-f") || compareString(inputs[4], "--files")) {
+                for (int fileInput = 5; fileInput < num; fileInput++) {
+                    copyFile(std::string(directory)+ "/" + inputs[fileInput], path + inputs[fileInput]);
+                }
+            } else {
+                stringvec filesToCopy;
+                read_directory(std::string(directory), filesToCopy, "");
+                for (int i = 0; i < filesToCopy.size(); i++) {
+                    copyFile(std::string(directory)+ "/" + filesToCopy[i], path + filesToCopy[i]);
+                }
+            }
+        } else {
+            std::cout << "Path specified is not a directory" << std::endl;
+        }
+    } else {
+        std::cout << "[ERROR/s]: No path specified" << std::endl;
+    }
+}

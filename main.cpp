@@ -10,20 +10,27 @@ void parserCommand(const char* inputs[], int number) {
      // Check if prob folder is created by looking if a file included exists
     std::ifstream file(std::string(directory) + "/prob/config");  
     if (file.is_open() || compareString(std::string(inputs[1]), "init")) {
-        if (std::string(inputs[1]).compare("init") == 0) {
+        if (compareString(inputs[1], "init")) {
             initCommand(inputs, number);
             file.close();
-        } else if (std::string(inputs[1]).compare("config") == 0) {
+        } else if (compareString(inputs[1], "config")) {
             configCommand(inputs, number);
             file.close();
-        } else if (std::string(inputs[1]).compare("add") == 0) {
+        } else if (compareString(inputs[1], "add")) {
             addCommand(inputs, number);
             file.close();
-        } else if (std::string(inputs[1]).compare("backup") == 0) {
+        } else if (compareString(inputs[1], "backup")) {
             backupCommand(inputs, number);
             file.close();
+        } else {
+            showHelp(workdir + "dist/help.txt");
+            file.close();
         }
-        else {
+    } else if (compareString(inputs[1], "backup")) {
+        if (compareString(inputs[2], "-s") || compareString(inputs[2], "--single")) {
+            singleBackup(inputs, number);
+            file.close();
+        } else {
             showHelp(workdir + "dist/help.txt");
             file.close();
         }

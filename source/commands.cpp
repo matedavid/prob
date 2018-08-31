@@ -218,6 +218,7 @@ void backupCommand(const char* inputs[], int num) {
     }
 }
 
+// Not yet implemented, makes a segmentation fault 11 
 void singleBackup(const char* inputs[], int num) {
     if (inputs[3] != NULL) {
         if (opendir(inputs[3])) {

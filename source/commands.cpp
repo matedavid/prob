@@ -221,14 +221,15 @@ void backupCommand(const char* inputs[], int num) {
 void singleBackup(const char* inputs[], int num) {
     if (inputs[3] != NULL) {
         if (opendir(inputs[3])) {
-            std::string path = inputs[3];
-            path = path[path.length()] == '/' ? path : path + '/';
+            std::string inputPath = inputs[3];
+            std::string path = inputPath[inputPath.length()] == '/' ? inputPath : inputPath + '/';
             if (compareString(inputs[4], "-f") || compareString(inputs[4], "--files")) {
                 for (int fileInput = 5; fileInput < num; fileInput++) {
                     copyFile(std::string(directory)+ "/" + inputs[fileInput], path + inputs[fileInput]);
                 }
             } else {
                 stringvec filesToCopy;
+                std::cout << "Single all" << std::endl;
                 read_directory(std::string(directory), filesToCopy, "");
                 for (int i = 0; i < filesToCopy.size(); i++) {
                     copyFile(std::string(directory)+ "/" + filesToCopy[i], path + filesToCopy[i]);

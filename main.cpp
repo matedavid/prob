@@ -20,16 +20,13 @@ void parserCommand(const char* inputs[], int number) {
             addCommand(inputs, number);
             file.close();
         } else if (compareString(inputs[1], "backup")) {
-            backupCommand(inputs, number);
-            file.close();
-        } else {
-            showHelp(workdir + "dist/help.txt");
-            file.close();
-        }
-    } else if (compareString(inputs[1], "backup")) {
-        if (compareString(inputs[2], "-s") || compareString(inputs[2], "--single")) {
-            singleBackup(inputs, number);
-            file.close();
+            if (compareString(inputs[2], "-s") || compareString(inputs[2], "--single")) {
+                singleBackup(inputs, number);
+                file.close();
+            } else {
+                backupCommand(inputs, number);
+                file.close();
+            }
         } else {
             showHelp(workdir + "dist/help.txt");
             file.close();

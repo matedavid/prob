@@ -13,4 +13,4 @@ typedef std::vector<std::string> stringvec;
 
 extern char directory[MAX_INPUT];
 extern std::string workdir;
-extern char key;
+extern std::string notWantedFiles[5];

@@ -15,13 +15,12 @@ void read_directory(const std::string& name, stringvec& v, std::string toAdd)
         }
         toIgnore.push_back(".probignore");
     }
-    int index = 0;
+    
     while ((dp = readdir(dirp)) != NULL) {
         if (!compareString(dp->d_name, ".") && !compareString(dp->d_name, "..") && !compareString(dp->d_name, ".DS_Store") && !compareString(dp->d_name, "prob")) {
             if (toIgnore.size() > 0) {
                 if (!seeIfInList(dp->d_name, toIgnore)) {
                     std::string name = std::string(directory) + "/" + dp->d_name;
-                    //std::cout << name << std::endl;
                     if (opendir(name.c_str())) {
                         read_directory(name, v, dp->d_name + std::string("/"));
                     } else if (!compareString(toAdd, "") && !compareString(toAdd, " ")){
@@ -30,7 +29,6 @@ void read_directory(const std::string& name, stringvec& v, std::string toAdd)
                             std::string newToAdd = toAdd + dp->d_name + "/";
                             read_directory(name, v, newToAdd);
                         } else {
-                            std::cout << name << std::endl;
                             v.push_back(toAdd + dp->d_name);
                         }
                     } else {
@@ -47,7 +45,6 @@ void read_directory(const std::string& name, stringvec& v, std::string toAdd)
                         std::string newToAdd = toAdd + dp->d_name + "/";
                         read_directory(name, v, newToAdd);
                     } else {
-                        std::cout << name << std::endl;
                         v.push_back(toAdd + dp->d_name);
                     }
                 } else {

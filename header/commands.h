@@ -6,8 +6,8 @@
 #include "codification.h"
 #include "files.h"
 
-void initCommand(const char* inputs[], int num);
+void initCommand();
 void configCommand(const char* inputs[], int num);
 void addCommand(const char* inputs[], int num);
-void backupCommand(const char* inputs[], int num);
+void backupCommand();
 void singleBackup(const char* inputs[], int num);

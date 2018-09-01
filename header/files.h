@@ -6,4 +6,4 @@
 void copyFile(std::string pathFile, std::string pahToCopy);
 bool seeIfInList(std::string thing, stringvec array);
 void clearFile(std::fstream& fileToClear, std::string path);
-void readFile(std::fstream& file, std::string& toCopy);
+//void readFile(std::fstream& file, std::string& toCopy);

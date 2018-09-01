@@ -3,7 +3,7 @@
 #include "../header/commands.h"
 
 // Init command action
-void initCommand(const char* inputs[], int num) {
+void initCommand() {
     int success = createFolder((std::string)directory + "/prob");
     if (success == 0) {
         std::cout << "Folder created succesfully on " + (std::string)directory + "/prob" << std::endl;
@@ -24,82 +24,54 @@ void initCommand(const char* inputs[], int num) {
 
 // Config command action
 void configCommand(const char* inputs[], int num) {
-    bool flags = num == 4 ? true : false;
+    bool flags = num > 2 ? true : false;
+
+    std::fstream file;
 
     if (flags) {
-        std::fstream config((std::string)directory + "/prob/config");
-        if (config.is_open()) {
-            if (std::string(inputs[2]).compare("path") == 0) {
-                std::string path = inputs[3];
-                if (path[path.length() - 1] != '/') {
-                    path += '/';
-                }
-                config << std::string(path);
-                std::cout << "[SUCCES]: Path configuration added succesfully" << std::endl;
+        std::string line;
+        if (compareString(inputs[2], "path")) {
+            file.open(std::string(directory) + "/prob/config");
+            if (inputs[3]) {
+                std::string fakePath = inputs[3], path;
+                path = fakePath[fakePath.length()] == '/' ? fakePath : fakePath+ "/";
+                file << path;
+                std::cout << "Path configured succesfully" << std::endl;
             } else {
-                std::cout << workdir << std::endl;
-                showHelp(workdir + "dist/spec/config.txt");
-            }
-        } else {
-            std::cout << "[ERROR/s]: Config file not found, try running 'prob init' again" << std::endl;
-        }
-        config.close();
-    } else {
-        if (compareString(inputs[2], "path")) { 
-            std::ifstream file(std::string(directory) + "/prob/config");
-            if (file.is_open()) {
-                std::string path;
-                getline(file, path);
-                if (path.compare("") == 0 || path.compare(" ") == 0) {
-                    std::cout << "Path not configured, run 'prob config path <path>' to configure it" << std::endl;
+                if (getline(file, line)) {
+                    std::cout << line << std::endl;
                 } else {
-                    std::cout << path << std::endl;
+                    std::cout << "[ERROR/s]: Path not configured, run 'prob config path <path>' to configure it" << std::endl;
                 }
-            } else {
-                std::cout << "Configure file not found, try running 'prob init'" << std::endl;
             }
-        } else if (compareString(inputs[2], "added")) { 
-            std::ifstream file(std::string(directory) +  "/prob/temporal");
-            if (file.is_open()) {
-                std::string line; 
-                bool noFile = true;
-                while(getline(file, line)) {
-                    if (line.compare(".") == 0) {
-                        stringvec allFiles;
-                        read_directory(".", allFiles, "");
-                        for (int i = 0; i < allFiles.size(); i++) {
-                            std::cout << allFiles[i] << std::endl;
-                            noFile = false;
-                        }
-                        break;
-                    }
-                    std::cout << line << std::endl;
-                    noFile = false;
-                }
-                if (noFile) {
-                    std::cout << "No added files, run 'prob add <files>' to add files" << std::endl;
-                }
-            } else {
-                std::cout << "Temporal file couldn't be found, try running 'prob init' to set up the environment" << std::endl;
-            }
+            file.close();
         } else if (compareString(inputs[2], "logs")) {
-            std::ifstream logs(std::string(directory) + "/prob/logs");
-            if (logs.is_open()) {
-                std::string line;
-                bool noLogs = true;
-                while(getline(logs, line)) {
+            file.open(std::string(directory) + "/prob/logs");
+            if (getline(file, line)) {
+                std::cout << line;
+                while (getline(file, line)) {
                     std::cout << line << std::endl;
-                    noLogs = false;
                 }
-
-                if (noLogs) {
-                    std::cout << "No logs were found, run 'prob backup' to save files and logs will be added" << std::endl;
-                }
+            } else {
+                std::cout << "[ERROR/s]: No backups found" << std::endl;
             }
-            logs.close();
+            file.close();
+        } else if (compareString(inputs[2], "added")) {
+            file.open(std::string(directory) + "/prob/temporal");
+            if (getline(file, line)) {
+                std::cout << line << std::endl;
+                while(getline(file, line)) {
+                    std::cout << line << std::endl;
+                }
+            } else {
+                std::cout << "[ERROR/s]: No files added, run 'prob add [files]' to add them" << std::endl;
+            }
+            file.close();
         } else {
-            showHelp(workdir + "dist/spec/config.txt");
+            showHelp(workdir + "dist/spec/config.txt");   
         }
+    } else {
+        showHelp(workdir + "dist/spec/config.txt");
     }
 }
 
@@ -115,7 +87,7 @@ void addCommand(const char* inputs[], int num) {
 
             // Add all files
             if (compareString(inputs[2], ".")) {
-                for (int i = 0; i < filesInDirectory.size(); i++) {
+                for (int i = 0; i < int(filesInDirectory.size()); i++) {
                     temporal << filesInDirectory[i] << "\n";
                     std::cout << filesInDirectory[i] << " added succesfully" << std::endl;
                 }
@@ -125,7 +97,6 @@ void addCommand(const char* inputs[], int num) {
                 getline(temporal, line);
                 if (!compareString(line, "") && !compareString(line, " ")) {
                     clearFile(temporal, std::string(directory) + "/prob/temporal");
-                    std::ofstream clear(std::string(directory) + "/prob/temporal",  std::ofstream::trunc);
                     std::cout << "Files to add reseted" << std::endl;
                 } else {
                     std::cout << "[ERROR/s]: no files added, fun 'prob add <files>' to add files" << std::endl;
@@ -143,7 +114,7 @@ void addCommand(const char* inputs[], int num) {
                         clearFile(temporal, std::string(directory) + "/prob/temporal");
                         std::ofstream temporal(std::string(directory) + "/prob/temporal");
                         if (filesAdded.size() > 0) {
-                            for (int i = 0; i < filesAdded.size(); i++) {
+                            for (int i = 0; i < int(filesAdded.size()); i++) {
                                 temporal << filesAdded[i] << "\n";
                             }
                         }
@@ -169,7 +140,7 @@ void addCommand(const char* inputs[], int num) {
 }
 
 // Backup command action -> where the saving of the files happens
-void backupCommand(const char* inputs[], int num) {
+void backupCommand() {
     std::ifstream config(std::string(directory) + "/prob/config");
     std::ifstream temporal(std::string(directory) + "/prob/temporal");
     std::fstream logs(std::string(directory) + "/prob/logs", std::ios::in | std::ios::out | std::ios::ate);
@@ -218,13 +189,14 @@ void backupCommand(const char* inputs[], int num) {
     }
 }
 
-// Not yet implemented, makes a segmentation fault 11 
+// Not yet implemented, makes a segmentation fault 11
 void singleBackup(const char* inputs[], int num) {
+    std::cout << "Single backup" << std::endl;
     if (inputs[3] != NULL) {
         if (opendir(inputs[3])) {
             std::string inputPath = inputs[3];
             std::string path = inputPath[inputPath.length()] == '/' ? inputPath : inputPath + '/';
-            if (compareString(inputs[4], "-f") || compareString(inputs[4], "--files")) {
+            if (compareString(inputs[4], "-f") || compareString(inputs[4], "--file")) {
                 for (int fileInput = 5; fileInput < num; fileInput++) {
                     copyFile(std::string(directory)+ "/" + inputs[fileInput], path + inputs[fileInput]);
                 }
@@ -232,7 +204,7 @@ void singleBackup(const char* inputs[], int num) {
                 stringvec filesToCopy;
                 std::cout << "Single all" << std::endl;
                 read_directory(std::string(directory), filesToCopy, "");
-                for (int i = 0; i < filesToCopy.size(); i++) {
+                for (int i = 0; i < int(filesToCopy.size()); i++) {
                     copyFile(std::string(directory)+ "/" + filesToCopy[i], path + filesToCopy[i]);
                 }
             }

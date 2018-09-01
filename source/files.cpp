@@ -19,7 +19,7 @@ void copyFile(std::string pathFile, std::string pathToCopy) {
 }
 
 bool seeIfInList(std::string thing, stringvec array) {
-    for (int i = 0; i < array.size(); i++) {
+    for (int i = 0; i < int(array.size()); i++) {
         if (compareString(array[i], thing)) {
             return true;
         }
@@ -33,6 +33,8 @@ void clearFile(std::fstream& fileToClear, std::string path) {
     clear.close();
 }
 
+/*
 void readFile(std::fstream& file, std::string& toCopy) {
     
 }
+*/

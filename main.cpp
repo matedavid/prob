@@ -7,28 +7,26 @@
 
 // Parses the input from the terminal and does the input action
 void parserCommand(const char* inputs[], int number) {
-     // Check if prob folder is created by looking if a file included exists
-    std::ifstream file(std::string(directory) + "/prob/config");  
-    if (file.is_open() || compareString(std::string(inputs[1]), "init")) {
+     // Check if prob folder is created
+    if (opendir(directory)) {
         if (compareString(inputs[1], "init")) {
-            initCommand(inputs, number);
-            file.close();
+            initCommand();
         } else if (compareString(inputs[1], "config")) {
             configCommand(inputs, number);
-            file.close();
         } else if (compareString(inputs[1], "add")) {
             addCommand(inputs, number);
-            file.close();
         } else if (compareString(inputs[1], "backup")) {
-            backupCommand(inputs, number);
-            file.close();
+            int single = (inputs[2] != NULL) ? (compareString(inputs[2], "-s") || compareString(inputs[2], "--single")) ? 1 : 0 : 0;
+            if (single) {
+                singleBackup(inputs, number);
+            } else {
+                backupCommand();
+            }
         } else {
             showHelp(workdir + "dist/help.txt");
-            file.close();
         }
     } else {
-        std::cout << "[ERROR/s]: couldn't find prob folder, run 'prob init' to set up the environment" << std::endl;
-        file.close();
+        std::cout << "[ERROR/s]: Couldn't find prob folder, run 'prob init' to create the environment" << std::endl;
     }
 }
 

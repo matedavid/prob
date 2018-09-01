@@ -8,3 +8,4 @@ configurations:
 OR:
     - path : to get the path assigned
     - added : to get the list of all the added files
+    - logs : to get the list of latest backups

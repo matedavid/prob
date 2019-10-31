@@ -2,8 +2,7 @@
 
 ## Description:
 
-* A git based private backup system, where all the files instead of beeing saved in a remote server, they are saved 'locally' (can be configured to save the files on cloud services).
-
+* A git based private backup system, where, instead of all the files being saved on a remote server, you can choose to save them locally wherever you want to 
 
 ## Use:
 prob command [flags]
@@ -30,5 +29,5 @@ prob command [flags]
 * <strong>backup</strong>: will backup all the files added
 
 
-# Compile code
+## Compile code
 Simply run `cmake .` and `make` and the program will be compiled on the `build/` folder

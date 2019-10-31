@@ -48,7 +48,7 @@ void configCommand(const char* inputs[], int num) {
         } else if (compareString(inputs[2], "logs")) {
             file.open(std::string(directory) + "/prob/logs");
             if (getline(file, line)) {
-                std::cout << line;
+                std::cout << line << std::endl;
                 while (getline(file, line)) {
                     std::cout << line << std::endl;
                 }

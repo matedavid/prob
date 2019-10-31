@@ -1,6 +1,5 @@
 #include "header/config.h"
 #include "header/pathFuncs.h"
-#include "header/codification.h"
 #include "header/extraFuncs.h"
 #include "header/files.h"
 #include "header/commands.h"

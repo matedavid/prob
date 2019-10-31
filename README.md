@@ -1,18 +1,12 @@
 # Prob
 
-  
-
 ## Description:
 
 * A git based private backup system, where all the files instead of beeing saved in a remote server, they are saved 'locally' (can be configured to save the files on cloud services).
 
-  
 
 ## Use:
-
 prob command [flags]
-
-  
 
 ### Commands:
 
@@ -34,3 +28,7 @@ prob command [flags]
 	* <strong>add [files]</strong>: will add the files specified
 	* <strong>add .</strong> : will add all the files in the directory
 * <strong>backup</strong>: will backup all the files added
+
+
+# Compile code
+Simply run `cmake .` and `make` and the program will be compiled on the `build/` folder

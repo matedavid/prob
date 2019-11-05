@@ -3,7 +3,6 @@
 #include "config.h"
 #include "extraFuncs.h"
 #include "pathFuncs.h"
-#include "codification.h"
 #include "files.h"
 
 void initCommand();

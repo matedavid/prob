@@ -3,7 +3,7 @@
 #include "../header/extraFuncs.h"
 
 void showHelp(std::string path) {
-    std::ifstream helpFile(path, std::ios::in);
+    std::ifstream helpFile(path);
     if (helpFile.is_open()) {
         std::string line;
         while (getline(helpFile, line)) {

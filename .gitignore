@@ -1,6 +1,8 @@
 .DS_Store
 .vscode
 
+build/prob
+
 # CMake Files
 CMakeFiles/
 MakeFile

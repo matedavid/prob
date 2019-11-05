@@ -56,12 +56,15 @@ int createFolder(std::string folderPath) {
 
 std::string getFilePath(std::string path) {
     std::string newPath;
+    bool first;
     for (int i = path.length(); i > 0; i--) {
-        if ((char)path[i] == '/') {
+        if ((char)path[i] == '/' && first == true) {
             for (int e = 0; e < i+1; e++) {
                 newPath += path[e];
             }
             break;
+        } else if ((char)path[i] == '/' && first == false) {
+            first = true;
         }
     }
     path.clear();

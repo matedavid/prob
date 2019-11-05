@@ -1,8 +1,8 @@
-#include "header/config.h"
-#include "header/pathFuncs.h"
-#include "header/extraFuncs.h"
-#include "header/files.h"
-#include "header/commands.h"
+#include "config.h"
+#include "pathFuncs.h"
+#include "extraFuncs.h"
+#include "files.h"
+#include "commands.h"
 
 // Parses the input from the terminal and does the input action
 void parserCommand(const char* inputs[], int number) {
